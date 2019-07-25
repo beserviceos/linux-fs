@@ -1,0 +1,348 @@
+Version History for Linux Kernel on F&S Vybrid Boards and Modules
+=================================================================
+
+Remark: Q/D=Quad/Dual, DL/S: DualLite/Solo, SX: Solo-X, UL: UltraLight
+
+linux-4.1.5-fus-Y1.0 (18.05.2018)
+---------------------------------
+Supported Boards: armStoneA9, armStoneA9r2, efusA9, PicoMODA9, NetDCUA9,
+                  QBlissA9, QBlissA9r2, efusA7UL, CubeA7UL, Cube2.0,
+                  PicoCOM1.2, GAR1, efusA9X, PicoCOMA9X, CONT1
+Not tested:       -
+
+(No changes)
+
+
+
+linux-4.1.5-fsimx6ul-V2.1 (21.02.2018)
+--------------------------------------
+Supported Boards: armStoneA9, armStoneA9r2, efusA9, PicoMODA9, NetDCUA9,
+                  QBlissA9, QBlissA9r2, efusA7UL, CubeA7UL, Cube2.0,
+                  PicoCOM1.2, GAR1, efusA9X, PicoCOMA9X, CONT1
+Not tested:       -
+
+- Add checks to efusa9x.dts to avoid errors when not using audio
+- Add LED trigger to show link up/down status for ethernet PHY
+- Update to rel_imx_4.1.15_1.2.0_ga (Add support for i.MX7D)
+- Update to rel_imx_4.1.15_2.0.0_ga (Initial support for i.MX6ULL)
+- Update to rel_imx_4.1.15_2.0.1_patch
+- Update to rel_imx_4.1.15_2.0.2_patch (Support for i.MX6ULL 800 MHz)
+- Update to rel_imx_4.1.15_2.0.3_patch (Support for i.MX6ULL 900 MHz)
+- Revert bad display settings on efusA7UL
+- Backport differing pad settings for i.MX6ULL from rel_imx_4.9.x_1.0.0_ga
+- Improve i.MX6ULL settings
+- Add efusa7ull.dts and support for efusA7UL board rev 1.22
+- Keep cont1.dts in sync with other fsimx6sx boards
+- Re-enable operating points for 792 and 900 MHz on i.MX6ULL
+- Add i.MX6ULL to fsimx6ul_defconfig
+
+
+
+linux-4.1.5-fsimx6sx-V2.1 (08.01.2018)
+--------------------------------------
+Supported Boards: armStoneA9, armStoneA9r2, efusA9, PicoMODA9, NetDCUA9,
+                  QBlissA9, QBlissA9r2, efusA7UL, CubeA7UL, Cube2.0,
+                  PicoCOM1.2, GAR1, efusA9X, PicoCOMA9X, CONT1
+Not tested:       -
+
+- Improve PicoCOMA9X device tree pinmux settings
+- Make bootaux command similar to U-Boot: start/stop/pause/continue/run
+- Improve efusA9X, PicoCOMA9X device tree and fsimx6sx_defconfig
+- Fix support for 8250-16550 UART to use 4 ports
+- Add phy led trigger
+- Use phy led trigger to gar1.dts
+- Change fsimx6sx/ul_defconfig to support Silex WLAN
+- Add option to anable/disable GPU on PicoCOMA9X
+- Add support for PCIe on efusA9X
+- Add CONFIG_FIXED_PHY to fsimx6sx_defconfig
+- Add missing status = "okay"; for SPI_A on efusA9X
+
+
+
+linux-4.1.15-fsimx6-V3.1 (20.11.2017)
+-------------------------------------
+Supported Boards: armStoneA9, armStoneA9r2, efusA9, PicoMODA9, NetDCUA9,
+                  QBlissA9, QBlissA9r2, efusA7UL, CubeA7UL, Cube2.0,
+                  PicoCOM1.2, GAR1, efusA9X, PicoCOMA9X, CONT1
+Not tested:       BemA9X
+
+- Add Sitronix ST1633I pcap touch
+- Basic initial device tree for QBlissa9q
+- Improve temperature sensor bme280 driver
+- Improve Focaltech touch ft5x06
+- Improve armStoneA9r2 DT audio SGTL5000 clock
+- Improve armStoneA9r2 DT and driver for MIPI camera
+- Rename History-F+S-Kernel-txt to History-F+S-Kernel.txt
+- Switch F&S default display configurations to 32 bpp
+- Implement polarity inversion for pwm-imx
+- Add support for PicoCOMA9X with PCOMnet
+- Change DMA, activate defines in picocoma9x.dts
+- Add Gamma2 option to leds-pwm.c driver
+- Add support for Cube2.0
+- Optimize CubeA7UL device tree
+- Add wm9715 support, needed for NetDCUA9
+- Improve wm9715 support
+- Add device tree for NetDCUA9 and improve defconfig for fsimx6 S/DL/Q
+- Improve Asix AX88796 driver and phy_device driver
+- Improve NetDCUA9 device tree, support AX88796B
+- Add fsl,mclk-out to SAI for outgoing MCLK on i.MX6UL
+- Add support for PicoCOM1.2
+- Fix ethernet clock settings on i.MX6UL and i.MX6SX
+- Do not rotate display by default on aST-ADP-EDT1
+- Add ET035080 to LCD database, fix ET070080 timings
+- Add support for GAR1
+- Improve netdcua9 fec settings
+- Support for PicoCOMA9X on standard SKIT
+- On efusA9X fix RTS/CTS on UART3
+- Do not define RTC_IRQ pad twice on PicoCOM1.2
+- Rename defines in GAR1 device tree
+- Improve LCD Power Management for i.MX6SX/UL
+- Improve ILINK PCAP touch support
+- Add support for ILI21XX and ST1633I touch on F&S platforms
+- Set default ecc_strength to 8 on PicoMODA9
+- Improve GAR1 device tree USB Power
+- Improve SGTL5000 on imx.6: no-standby, ext. vddd, small pop
+- Improve network settings GAR1 devicetree
+- Improve display settings PicoCOMA9X
+- Improve device tree IOMUX settings for GPIOs
+- Add picocoma9x to dts Makefile
+- Improve eMMC handling on i.MX6
+- Implement DEFAULT button on Cube2.0
+- Support HDP signal with inverted polarity in HDMI driver
+- Add support for QBlissA9
+- Add support for QBlissA9r2
+- Add ET8076 HID Multi-touch support
+- Add support for Freescale DCU DRM Driver
+- Improve vf610 support
+- Add support for armStoneA5
+- Improve DCU DRM driver
+- Improve imx6sx.dtsi PWM settings
+- Improve spi-imx driver to support more than 4 chip selects
+- Allow keeping GPIO interrupt settings from U-Boot
+- Fix clock sources for cko2_sels in clk-imx6ul.c
+- Allow clock activation via devcie tree at startup in clk-imx6ul.c
+- Improve ethernet settings in GAR1 device tree
+- Improve PicoMODA9 device tree settings
+- Improve NetDCUA9 pinmux settings
+- Improve armStoneA9r2 pinmux settings
+- Improve armStoneA9 pinmux settings
+- Add support for customer specific board CONT1
+- Add polarity settings for USB_OTG/H1_PWR/OC on i.MX6
+- Improve device tree settings for USB on fsimx6/sx/ul
+- Fix display settings for PicoCOMA9X
+- Add auxiliary core linux driver support
+- Improve RPMsg driver dynamic vring buffer start addresses
+- Improve auxiliary core driver
+- Avoid warning in bdinfo driver if DEBUG_LOCK_ALLOC is active
+- Add mono2both flag to device trees
+- Add mdio nodes to FEC device tree nodes on fsimx6, allows setting the speed
+- Add RPMsg example fs_adc_i2c_rpmsg_demo to show communication A9 <-> M4
+- Add SUPPORT_M4 to efusa9x.dts
+- Fix freeRTOS periodicWFI example
+- mxs-dma-ext.c: Add iram option, remove runtime suspend
+- Add iram setting to dma_apbh on fsimx6/sx/ul
+- Enhance DDR3 busfreq driver for i.MX6/SX/UL
+- Pretty-print F&S device trees, update copyright date
+- Restructure PicoMODA9 device trees
+- Improve device tree for PicoCOMA9X
+- Improve device trees for several F&S boards
+- Fix RTS/CTS settings for UART on fsimx6/sx/ul
+- Disable bus frequency scaling on fsimx6/sx/ul
+- Move SDMA descriptors to OCRAM on i.MX6 and i.MX6SX
+- SGTL5000 warmstart problems: restore code with internal LDO
+- Add ax88796 driver to fsimx6_defconfig for 2nd LAN on NetDCUA9
+- Restructure device tree for efusA9X
+- virtio_rpmsg_bus.c: Remove debug messages, they slowed down everything
+- Improve example fs_rpmsg.c
+- Fix SD port settings and M4 configs in efusA9X device tree
+- Add SUPPORT_M4 to PicoCOMA9X devicetree + small i2c3 fix
+- Rework PicoCOM1.2 device tree
+- Fix SD/eMMC/WLAN/BT device tree settings for F&S boards
+- sdhci-esdhc-imx.c: Do not switch pad settings unnecessarily often
+- sdhci.c: Remove console message if voltage switching fails
+- wm97xx-core.c: Remove warning about unspecified IRQ
+- Minor fixes in device trees for efusA7UL and NetDCUA9
+- Change lcdif aliases for imx6sx.dtsi
+- Improve imx6sx can clock settings
+- Improve Display regulator settings in device trees
+- QBlissA9/QBlissA9r2: Rename UART/I2C/PWM ports, enhance device trees
+- Finish UART RTS/CTS modification
+- Disable internal SNVS-RTC on i.MX6/i.MX6UL
+- Fix device tree issues found during test
+
+
+
+linux-4.1.5-fsimx6sx-V2.0 (20.08.2016)
+--------------------------------------
+
+No changes.
+
+
+
+linux-4.1.5-fsimx6ul-V2.0 (19.08.2016)
+--------------------------------------
+Supported Boards: armStoneA9, armStoneA9r2, efusA9, PicoMODA9, efusA7UL,
+                  efusA9X, CubeA7UL
+Not tested:       BemA9X
+
+- Add esmt pcap touch
+- Fix spelling error for picomoda9dl.dtb in arch/arm/boot/dts/Makefile
+- Add HID Multitouch to defconfigs for fsimx6, fsimx6ul, fsimx6sx
+- Improve eMMC support on efusA9
+- Add support for second ethernet port on fsimx6ul and fsimx6sx
+- Fix ethernet clock chains in i.MX6UL and i.MX6SX clock trees
+- Remove i.MX6Q, i.MX6SL, i.MX7D CPU types from fsimx6sx_defconfig
+- Go back to mxsfb.c and ldb.c from kernel 3.14.52 to get LVDS working again
+- Add new display configuration method for fsimx6ul and fsimx6sx
+
+
+
+linux-4.1.15-fsimx6-V3.0 (08.08.2016)
+-------------------------------------
+Supported Boards: armStoneA9, armStoneA9r2, efusA9, PicoMODA9, efusA7UL
+Not tested:       efusA9X, BemA9X, CubeA7UL
+
+- Add ft5x06 touch to BemA9, fix I2C pad settings
+- Improve pca963x driver, reduce compiler warnings
+- Fix the cache handling on SGTL5000 to allow suspend/resume
+- Add suspend/resume to mxs-dma-ext.c
+- Add suspend/resume to gpmi-nand-fus.c
+- Add i.MX7 support to F&S version mxs-dma-ext.c
+- Improve F&S GPMI nand driver to allow suspend/resume
+- Use MMC_UNSAFE_RESUME as default behavior for SD/MMC in suspend/resume
+- Remove compiler warnings on fsimx6, fsimx6sx, fsimx6ul, prepare for GCC-5.2
+- Remove IMX6UL_CLK_AIPSTZ3 from i.MX6UL clock tree, this CPU has no AIPS3
+- Make compilation of i.MX6 platforms without FEC possible
+- Let CONFIG_MXS_DMA_EXT select CONFIG_STMP_DEVICE
+- Add daisy chain settings to imx6ul-pinfunc.h (backport from 4.1.15 kernel)
+- Add vmmc regulators to device trees of some F&S boards
+- Add mono2both property to SGTL5000 sound codec
+- Fix audio playback with double frequency, mono 32bit
+- Add bdinfo support for fsimx6
+- Optimize fsimx6ul configuration, remove other CPU types
+- Add Bosch bme280 multisensor
+- Add gpio based infrared transmitter
+- Improve wl12xx driver, backport device tree settings from kernel 4.1
+- In several steps rebase to Freescale/NXP kernel rel_imx_4.1.15_1.0.0_ga
+- Fix support for fsimx6ul and fsimx6sx on kernel 4.1.15
+- Add STMicroelectronics hts221 multisensor
+- Add device tree and improve defconfig for CubeA7UL (fsimx6ul)
+- Fix double declaration in wl12xx driver
+- Remove '+' suffix appended to kernel name if built in unclean directory
+- Modify efusA9 device tree to work on kernel 4.1.15
+- Add missing pinctrl for LVDS VBL_ON on efusA9X
+- Add display support for efusA9
+- Add device trees for armStoneA9
+- Support up to four displays on efusA9 and armStoneA9
+- Add SATA support for efusA9 Q/D and armStoneA9 Q/D
+- Add SX8655 touch support
+- Add vqmmc regulators to device trees to have SD/MMC working again
+- Add device trees for armStoneA9r2
+- Rebase to Freescale/NXP rel_imx_4.1.15_1.1.0_ga
+- Rebase to Freescale/NXP rel_imx_4.1.15_1.1.1_patch
+- Move declaration of mmc_sdio_force_remove() to core.h
+- On armStoneA9 remove port I2C7 again
+- Add CMA configuration to device trees of all F&S boards
+- Use F&S DDR3 settings, otherwise newer armStoneA9 board revisions will fail
+- Add some displays to drivers/video/fbdev/mxc/mxc_lcdif.c
+- Add status LEDs to efusA9, armStoneA9 and armStoneA9r2 device trees
+- On leds-pca963x driver, improve handling when configured as PWM
+- Prepare armStoneA9 device trees for PMIC usage
+- Rename F&S device trees, drop architecture prefix, add "q" or "dl" on fsimx6
+- Add atmel/mxt224.cfg to firmware directory, use on F&S device trees
+- Fix coding style and tabulation on Focaltech ft5x06_ts_v2 driver
+- Clean up ft5x06_ts_v2 driver, improve configuration via device tree
+- Remove dubious update feature from ft5x06_ts_v2 driver, rename to ft5x06_ts
+- Update ft5x06 device tree settings for all F&S boards
+- Move fsimx6sx iomuxc device tree settings to end of file
+- Clean up all F&S device trees
+- Ignore chip revision of Micrel KSZ8081 PHY in fixup code on i.MX6UL
+- Fix a couple of spelling errors in mxc_hdmi.c
+- Implement new display configuration for armStoneA9, armStoneA9r2, efusA9
+- Add device trees for PicoMODA9
+- Add phy fixup for DP83848 ethernet phy on PicoMODA9 to set correct LED mode
+- Add copy method for firmware files, rename mxt224.cfg to mxt224.cfg.copy
+- By default use LCD on efusA9, armStoneA9 and LVDS0 on armStoneA9r2, PicoMODA9
+- Use RGB666 for LCD on PicoMODA9, not BGR666
+- Synchronize device trees for PicoMODA9 with other F&S boards
+- Add "q" or "dl" to board_name in bdinfo
+
+
+
+linux-3.14.52-fsimx6sx-V1.0 (19.02.2016)
+----------------------------------------
+Supported Boards: efusA9X, BemA9X
+Not tested:       efusA7UL, efusA9
+
+- Improve pca963x LED driver, support configuration of outputs as PWM and GPIO
+- Improve touch configuration, only one touch at a time on efusA9X and efusA7UL
+- Activate all possible touch drivers in fsimx6sx_defconfig/fsimx6ul_defconfig
+- Add support for bdinfo device and use it on fsimx6sx and fsimx6ul
+- Handle bitflip count of last read page in NAND flash correctly
+- Rebase to kernel 3.14.52, Freescale version rel_imx_3.14.52_1.1.0_ga
+- Add support and device tree for BemA9X
+- Add device tree for efusA9
+- Add basic support for OV9665 camera
+- Further improve pca963x LED driver, fix polarity issue
+- Add fb-names in PWM backlight driver to refer to the framebuffer device
+- Support ENET clock output on i.MX6-SoloX and i.MX6UL (fsl,ref-clock-out)
+- Remove CMA size to 128MB on fsimx6sx, required for BemA9X
+- Improve device tree for efusA9X and efusA7UL
+
+
+
+linux-3.14.38-fsimx6ul-V1.0 (25.11.2015)
+----------------------------------------
+Supported Boards: efusA7UL
+
+- Use kernel 3.14.28, Freescale version rel_imx_3.14.28_1.0.0_ga
+- Improve behavior of cpu_is_imx6* macros
+- Add basic device tree imx6sx-efusa9x.dts and fsimx6sx_defconfig (efusA9X)
+- Fix mxsfb driver to work with LVDS (LDB) on i.MX6SX
+- Add audio support (SGTL5000) for efusA9X
+- Add support for SPI (spidev) on efusA9X
+- Add support for external RTC PCF8665 via I2C on efusA9X
+- Use Atmel driver for MXT touch, add support for Atmel MXT touch for efusA9X
+- Add support for Marvell SD8787 WLAN/Bluetooth for efusA9X
+- Add CAN support (flexcan) for efusA9X
+- Activate PXP v4l2 device on efusA9X (for video overlays)
+- Activate Vivante GPU for fsimx6sx
+- Add F&S extended MXS APBH DMA driver (needed for NAND driver)
+- Improve generic NAND driver (bitflips reporting, skip region for NBoot, etc.)
+- Add F&S version of GPMI NAND driver
+- Use F&S GPMI NAND driver on efusA9X
+- Add and use F&S Linux logo with Tux holding NetDCU tile
+- Add support for ADC on efusA9X
+- Add imx_v7_android_defconfig and fsimx6sx_android_defconfig (for Android)
+- Add basic support for Android on efusA9X
+- Rebase to linux-3.14.38, Freescale version rel_imx_3.14.38_6ul_ga
+- Add support for parallel RGB interface
+- Clean up fsimx6sx device tree and defconfig
+- Add support for Focaltech FT5x06 touch (ft5x06_ts_v2.c), backport driver
+  edt_ft5x06.c from kernel 3.17
+- Improve pca963x driver (Totem pole levels, DefaultOn & ActiveHigh configs)
+- Backport Semtech SX8654/SX8655/SX8656 touch driver from Kernel 4.2, improve
+  to allow setting parameters in device tree and via sysfs
+- Add device tree property "pattern" for mxsfb to set order of RGB bits
+- Add clko1 and clko2 infrastructure to i.MX6UL (needed for audio)
+- Fix "DMA chain execution failed" error in F&S GPMI NAND driver
+- On i.MX6UL, add clock for PWM4 and tune CPU operating points
+- Add device tree and defconfig for efusA7UL (fsimx6ul):
+  * LCD with 800x480 resolution (WVGA)
+  * pxp_v4l2 support for video overlays
+  * PWM backlight on PWM1 for backlight connector
+  * Backlight via PCA9632 for RGB adapter
+  * Audio with SGTL5000 on SAI2, register access with bitbanging I2C
+  * Ethernet: 100MBit/s via RMII on ENET1
+  * Serial ports on UART1, UART2, UART5 and UART6
+  * Flexcan1 and Flexcan2
+  * USB Device on USBOTG1, USB Host on USBOTG2
+  * USDHC1 for WLAN/Bluetooth (Marvell SD8787), prepared for SD card
+  * USDHC2 for eMMC, prepared for SD card
+  * I2C1 with PCA9632 (LED driver), Semtech SX8655 (4/5 wire touch), Atmel
+    MXT224 (pcap touch) and Focaltech FT5x06 (pcap touch)
+  * I2C2 with MXT224 (pcap touch)
+  * I2C5 (bitbanging) with SGTL5000 and RTC PCA8565
+  * ECSPI1 and ECSPI2 for user defined SPI (spidev)
+  * User PWM on PWM4
+  * GPMI for NAND flash with F&S NAND driver and F&S APBH DMA driver

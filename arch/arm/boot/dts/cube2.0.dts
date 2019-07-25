@@ -1,0 +1,374 @@
+/*
+ * Copyright (C) 2016-2017 F&S Elektronik Systeme GmbH
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+/* CMA: Set 64 MB for Continuous Memory Allocator */
+#define CONFIG_CUBE2_0_CMA_SIZE 0x4000000
+
+/* Set if USB OTG2 has power switch with over-current detection equipped */
+//#define CONFIG_CUBE2_0_HAVE_USB_OTG2_PWR_OC
+
+/dts-v1/;
+
+#include <dt-bindings/input/input.h>
+#include "imx6ul.dtsi"
+
+/ {
+	model = "F&S Cube2.0";
+	compatible = "fsl,imx6ul-cube2_0", "fsl,imx6ul";
+
+#if 0
+	chosen {
+		stdout-path = &uart1;
+	};
+#endif
+
+	memory {
+		reg = <0x80000000 0x80000000>;
+	};
+
+	pwmleds {
+		compatible = "pwm-leds";
+		yellow {
+			label = "yellow";
+			pwms = <&pwm6 0 7812500>;
+			max-brightness = <255>;
+			active-low;
+			gamma2;
+		};
+		green {
+			label = "green";
+			pwms = <&pwm7 0 7812500>;
+			max-brightness = <255>;
+			active-low;
+			gamma2;
+		};
+	};
+
+	regulators {
+		compatible = "simple-bus";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		wlan_en_reg: regulator_wl_en {
+			compatible = "regulator-fixed";
+			regulator-name = "WLAN";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			gpio = <&gpio3 13 0>;
+			enable-active-high;
+			startup-delay-us = <70000>;
+		};
+
+		reg_wlan_1v8: reg_wlan_1v8 {
+			compatible = "regulator-fixed";
+			regulator-name = "VQMMC WLAN_1V8";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			regulator-always-on;
+		};
+
+		regulator_bt_en {
+			compatible = "regulator-fixed";
+			regulator-name = "Bluetooth";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			gpio = <&gpio3 14 0>;
+			enable-active-high;
+		};
+
+		/* USB_OTG2_PWR done by USB controller, no regulator needed */
+#if 0 //###
+		reg_usb_otg2_vbus: usb_otg2_vbus {
+			compatible = "regulator-fixed";
+			regulator-name = "usb_otg2_vbus";
+			regulator-min-microvolt = <5000000>;
+			regulator-max-microvolt = <5000000>;
+#ifdef CONFIG_CUBE2_0_HAVE_USB_OTG2_PWR_OC
+			gpio = <&gpio1 2 0>;
+			enable-active-high;
+#else
+			regulator-always-on;
+#endif
+		};
+#endif //###
+
+		reg_vref_3v3: regulator@0 {
+			compatible = "regulator-fixed";
+			regulator-name = "vref-3v3";
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+			regulator-always-on;
+		};
+
+	};
+
+	/* DEFAULT key */
+	gpio_keys {
+		compatible = "gpio-keys";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		defaultkey {
+			label = "DEFAULT key";
+			linux,code = <KEY_SETUP>;
+			gpios = <&gpio1 24 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	/* F&S board information */
+	bdinfo {
+		compatible = "bdinfo";
+	};
+};
+
+/* RAM size for Continuous Memory Allocator */
+&cma {
+	size = <CONFIG_CUBE2_0_CMA_SIZE>;
+};
+
+&busfreq {
+	/* Disable bus frequency scaling, because reducing bus frequency to
+	   24 MHz does not work with all types of DDR3 RAM */
+	disable-scaling;
+};
+
+&cpu0 {
+	arm-supply = <&reg_arm>;
+	soc-supply = <&reg_soc>;
+//###	dc-supply = <&reg_dvfs>;
+};
+
+/* LED yellow */
+&pwm6 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_pwm6_0>;
+	status = "okay";
+};
+
+/* LED green */
+&pwm7 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_pwm7_0>;
+	status = "okay";
+};
+
+/* UART_A */
+&uart4 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart4>;
+	status = "okay";
+};
+
+/* UART for Bluetooth */
+&uart8 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart8>;
+	fsl,uart-has-rtscts;
+	status = "okay";
+};
+
+&usbotg1 {
+	dr_mode = "peripheral";
+	status = "okay";
+};
+
+&usbotg2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usbotg2>;
+//###	vbus-supply = <&reg_usb_otg2_vbus>;
+	dr_mode = "host";
+#ifdef CONFIG_CUBE2_0_HAVE_USB_OTG2_PWR_OC
+	pwr-active-high;
+	over-current-active-low;
+#else
+	disable-over-current;
+#endif
+	status = "okay";
+};
+
+&i2c3 {
+	clock_frequency = <100000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_i2c3>;
+	status = "okay";
+
+	// ### TODO: Apple-CP
+};
+
+/* On-board WLAN */
+&usdhc1 {
+	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+	pinctrl-0 = <&pinctrl_usdhc1>;
+	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
+	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
+	bus-width = <4>;
+	non-removable;
+	cap-power-off-card;
+	vmmc-supply = <&wlan_en_reg>;	/* VDD, misused for WLAN_EN */
+	vqmmc-supply = <&reg_wlan_1v8>;	/* VDD_IO */
+	voltage-ranges = <1800 1800>;
+	keep-power-in-suspend;
+	enable-sdio-wakeup;
+	status = "okay";
+
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	wlcore: wlcore@2 {
+		compatible = "ti,wl1801";
+		reg = <2>;
+		interrupt-parent = <&gpio3>;
+		interrupts = <28 IRQ_TYPE_LEVEL_HIGH>; /* gpio 92 */
+		ref-clock-frequency = <38400000>;
+	};
+};
+
+&dma_apbh {
+	/* Switch to F&S implementation of APBH DMA driver for GPMI (NAND) */
+	compatible = "fus,imx6ul-dma-apbh", "fus,imx28-dma-apbh";
+	iram = <&ocram>;
+};
+
+&gpmi {
+	/* Switch to F&S implementation of GPMI NAND driver */
+	compatible = "fus,imx6ul-gpmi-nand", "fus,imx6sx-gpmi-nand";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_gpmi_nand_1>;
+	fus,skipblocks = <2>;
+	fus,chunk1k;
+	status = "okay";
+};
+
+&iomuxc {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_hog_1>;
+	efusa7ul {
+		pinctrl_hog_1: hoggrp-1 {
+			fsl,pins = <
+				/* WLAN 32kHz clock */
+				MX6UL_PAD_ENET1_RX_EN__REF_CLK_32K	0x00008
+
+				/* WLAN_IRQ */
+				MX6UL_PAD_LCD_DATA23__GPIO3_IO28	0x0b058
+
+				/* WLAN_EN */
+				MX6UL_PAD_LCD_DATA08__GPIO3_IO13	0x03020
+
+				/* BT_EN */
+				MX6UL_PAD_LCD_DATA09__GPIO3_IO14	0x03020
+
+				/* DEFAULT key */
+				MX6UL_PAD_UART3_TX_DATA__GPIO1_IO24	0x0f020
+			>;
+		};
+
+		pinctrl_pwm6_0: pwm6grp-0 {
+			fsl,pins = <
+				MX6UL_PAD_ENET1_TX_EN__PWM6_OUT		0x110b0
+			>;
+		};
+
+		pinctrl_pwm7_0: pwm7grp-0 {
+			fsl,pins = <
+				MX6UL_PAD_ENET1_TX_CLK__PWM7_OUT	0x110b0
+			>;
+		};
+
+		pinctrl_uart4: uart4grp {
+			fsl,pins = <
+				MX6UL_PAD_UART4_TX_DATA__UART4_DCE_TX	0x1b0b1
+				MX6UL_PAD_UART4_RX_DATA__UART4_DCE_RX	0x1b0b1
+			>;
+		};
+
+		pinctrl_uart8: uart8grp {
+			fsl,pins = <
+				MX6UL_PAD_LCD_DATA04__UART8_DCE_CTS	0x1b0b1
+				MX6UL_PAD_LCD_DATA05__UART8_DCE_RTS	0x1b0b1
+				MX6UL_PAD_LCD_DATA20__UART8_DCE_TX	0x1b0b1
+				MX6UL_PAD_LCD_DATA21__UART8_DCE_RX	0x1b0b1
+			>;
+		};
+
+		pinctrl_usdhc1: usdhc1grp {
+			fsl,pins = <
+				MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x17091
+				MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x10091
+				MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x17091
+				MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x17091
+				MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x17091
+				MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x17091
+			>;
+		};
+
+		pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
+			fsl,pins = <
+				MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x170b9
+				MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x100b9
+				MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x170b9
+				MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x170b9
+				MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x170b9
+				MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x170b9
+			>;
+		};
+
+		pinctrl_usdhc1_200mhz: usdhc1grp200mhz {
+			fsl,pins = <
+				MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x170f9
+				MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x100f9
+				MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x170f9
+				MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x170f9
+				MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x170f9
+				MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x170f9
+			>;
+		};
+
+		pinctrl_usbotg2: usbotg2grp {
+			fsl,pins = <
+#ifdef CONFIG_CUBE2_0_HAVE_USB_OTG2_PWR_OC
+				/* USB_OTG2_PWR, active high */
+//###				MX6UL_PAD_GPIO1_IO02__GPIO1_IO02	0x03030
+				MX6UL_PAD_GPIO1_IO02__USB_OTG2_PWR	0x03030
+				/* USB_OTG2_OC, active low */
+				MX6UL_PAD_GPIO1_IO03__USB_OTG2_OC	0x1b000
+#endif
+			>;
+		};
+
+		pinctrl_i2c3: i2c3grp {
+			fsl,pins = <
+				MX6UL_PAD_LCD_DATA00__I2C3_SDA		0x4001b8b0
+				MX6UL_PAD_LCD_DATA01__I2C3_SCL		0x4001b8b0
+			>;
+		};
+
+		pinctrl_gpmi_nand_1: gpmi-nand-1 {
+#if 0
+			/* Already configured in NBoot/U-Boot */
+			fsl,pins = <
+				MX6SX_PAD_NAND_CLE__RAWNAND_CLE		0x0b0b1
+				MX6SX_PAD_NAND_ALE__RAWNAND_ALE		0x0b0b1
+				MX6SX_PAD_NAND_WP_B__RAWNAND_WP_B	0x0b0b1
+				MX6SX_PAD_NAND_READY_B__RAWNAND_READY_B	0x0b000
+				MX6SX_PAD_NAND_CE0_B__RAWNAND_CE0_B	0x0b0b1
+				//MX6SX_PAD_NAND_CE1_B__RAWNAND_CE1_B	0x0b0b1
+				MX6SX_PAD_NAND_RE_B__RAWNAND_RE_B	0x0b0b1
+				MX6SX_PAD_NAND_WE_B__RAWNAND_WE_B	0x0b0b1
+				MX6SX_PAD_NAND_DATA00__RAWNAND_DATA00	0x0b0b1
+				MX6SX_PAD_NAND_DATA01__RAWNAND_DATA01	0x0b0b1
+				MX6SX_PAD_NAND_DATA02__RAWNAND_DATA02	0x0b0b1
+				MX6SX_PAD_NAND_DATA03__RAWNAND_DATA03	0x0b0b1
+				MX6SX_PAD_NAND_DATA04__RAWNAND_DATA04	0x0b0b1
+				MX6SX_PAD_NAND_DATA05__RAWNAND_DATA05	0x0b0b1
+				MX6SX_PAD_NAND_DATA06__RAWNAND_DATA06	0x0b0b1
+				MX6SX_PAD_NAND_DATA07__RAWNAND_DATA07	0x0b0b1
+			>;
+#endif
+		};
+	};
+};

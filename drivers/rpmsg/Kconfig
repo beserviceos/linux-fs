@@ -1,0 +1,27 @@
+menu "Rpmsg drivers"
+
+# RPMSG always gets selected by whoever wants it
+config RPMSG
+	tristate
+	select VIRTIO
+	select VIRTUALIZATION
+
+config IMX_RPMSG_PINGPONG
+	tristate "IMX RPMSG pingpong driver -- loadable modules only"
+	default m
+	depends on RPMSG && m
+
+config IMX_RPMSG_TTY
+	tristate "IMX RPMSG tty driver -- loadable modules only"
+	default m
+	depends on RPMSG && m
+
+config FS_RPMSG
+  bool "Driver for the Cortex-M4 demo 'fs_adc_i2c_rpmsg_demo'"
+  default n
+  depends on RPMSG
+	help
+    This driver provides an interface under /sys/imx_rpmsg to retrieve
+    the values send by the fs_adc_i2c_rpmsg_demo from the Cortex-M4
+
+endmenu
